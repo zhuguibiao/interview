@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function jsonp(url, cb, success) {
+        // let name = `id_${new Date().getTime()}_${Math.random()
+        //   .toString()
+        //   .substr(2)}`;
+        let script = document.createElement("script");
+        script.src = url;
+        script.async = true;
+        script.type = "text/javascript";
+        // script.id = name;
+        var head = document.querySelector("head");
+        head.appendChild(script);
+        window[cb] = function (data) {
+          var elem = head.querySelector(`script`);
+          // head.removeChild(elem);
+          success && success(data);
+        };
+      }
+      for (var i = 0; i < 4; i++) {
+        jsonp(
+          `https://sp1.baidu.com/5b11fzupBgM18t7jm9iCKT-xh_/sensearch?wd=${i}&cb=callback&callback=callback&_=1590734113261`,
+          "callback",
+          function (value) {
+            console.log(value);
+          }
+        );
+      }
+      [7, 8, 9].forEach((item) => {
+        jsonp(
+          `https://sp1.baidu.com/5b11fzupBgM18t7jm9iCKT-xh_/sensearch?wd=${item}&cb=callback&callback=callback&_=1590734113261`,
+          "callback",
+          function (value) {
+            console.log(value);
+          }
+        );
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {string[]} dictionary
+       * @param {string} sentence
+       * @return {number}
+       */
+      var respace = function (dictionary, sentence) {
+        dictionary.sort((a, b) => {
+          return  b.length - a.length;
+        });
+        for (var i = 0; i < dictionary.length; i++) {
+          if (sentence.indexOf(dictionary[i]) > -1) {
+            sentence = sentence.replace(new RegExp(dictionary[i], "g"), "");
+            console.log(dictionary[i], sentence);
+          }
+        }
+        return sentence.length;
+      };
+      // var result = respace(["potimzz"], "potimzzpotimzz");
+      var result = respace(
+        ["looked", "just", "like", "her", "brother"],
+        "jesslookedjustliketimherbrother"
+      );
+      console.log(result);
+    </script>
+  </body>
+</html>

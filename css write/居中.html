@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .box {
+        position: relative;
+        border: 1px solid #ccc;
+        width: 300px;
+        height: 300px;
+        margin: auto;
+        margin-bottom: 20px;
+        margin-top: 20px;
+      }
+      .box1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cont {
+        background: yellow;
+      }
+    </style>
+    <div class="box box1">
+      <div class="cont">
+        第一种方式
+      </div>
+    </div>
+
+    <style>
+      .cont2 {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+      }
+    </style>
+    <div class="box box2">
+      <div class="cont cont2">
+        第二种方式
+      </div>
+    </div>
+
+    <style>
+      .box3 {
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .cont3 {
+        margin: auto;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+
+    <div class="box box3">
+      <div class="cont cont3">
+        第三种方式
+      </div>
+    </div>
+    <style>
+      .cont4 {
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+      }
+    </style>
+    <div class="box box4">
+      <div class="cont cont4">
+        第四种方式
+      </div>
+    </div>
+  </body>
+</html>

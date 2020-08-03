@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+       * 手写new
+       */
+      function create() {
+        // 创建一个空的对象
+        let obj = new Object();
+        // 获得构造函数
+        let Con = arguments[0];
+        // 链接到原型
+        obj.__proto__ = Con.prototype;
+        // 绑定 this，执行构造函数
+        let result = Con.call(obj, arguments);
+        console.log(arguments);
+        console.log(result);
+        // 确保 new 出来的是个对象
+        return typeof result === "object" ? result : obj;
+      }
+      function a() {
+        this.a = 1;
+      }
+      a.prototype.c = function () {
+        console.log(this.a);
+      };
+      var c = create(a);
+
+      var animals = [
+        { species: "Lion", name: "King" },
+        { species: "Whale", name: "Fail" },
+      ];
+
+      /* 手写call
+       * 第一个参数是需要执行call前面方法，所替换的this对象，后面的是单个参数，而不是数组
+       */
+      Function.prototype.myCall = function (context) {
+        var context = context || window;
+        // 给 context 添加一个属性
+        // call方法前面的是getValue，所以this就是getValue
+        // getValue.call(a, 'yck', '24') => a.fn = getValue
+        context.fn = this;
+        console.log(this);
+        // 将 context 后面的参数取出来
+        var args = [...arguments].slice(1);
+        // a.fn = getValue = this  fn就是方法getValue，方法前面的a调用，this就变成了a ===>达到我们的最终目的（改变call前面方法调用的this）
+        // getValue.call(a, 'yck', '24') => a.fn('yck', '24')
+        var result = context.fn(...args);
+        // 删除 fn
+        delete context.fn;
+        return result;
+      };
+
+      /* 手写myApply
+       * 区别是后面的是数组，而不是单个参数
+       */
+      Function.prototype.myApply = function (context) {
+        var context = context || window;
+        /* 给 context 添加一个属性fn
+         * Apply方法前面的是getValue，所以this就是getValue
+         * getValue.Apply(a, ['yck', '24']) => a.fn = getValue
+         */
+        context.fn = this;
+        if (arguments[1]) {
+          result = context.fn(...arguments[1]);
+        } else {
+          result = context.fn();
+        }
+        delete context.fn;
+        return result;
+      };
+      Object.prototype.toString.myCall([]);
+      Object.prototype.toString.myApply([]);
+
+      
+      /* Bind：改变函数运行的this
+       * a.bind(c)
+       * a目前是this，传入c
+       */
+      Array.prototype.myBind = function (context) {
+        var fn = this;
+        // 切割参数
+        var args = Array.prototype.slice(arguments, 1);
+        // 如果是new 操作呢，定义一个空函数载体
+        var Empty = function () {};
+        var targetFn = function () {
+          // 取当前参数
+          var arg = args.concat(Array.prototype.slice(arguments));
+          // 判断this 是不是在原型链
+          var _this = this instanceof Empty ? this : context;
+          fn.apply(_this, arg);
+        };
+        if (fn.prototype) {
+          Empty.prototype = fn.prototype;
+        }
+        targetFn.prototype = new Empty();
+        return targetFn;
+      };
+
+      /*  4步
+           创建一个对象，
+           链接到原型链
+           绑定this
+           然后return 对象
+       */
+      function news() {
+        var obj = new Object();
+        var cont = arguments[0];
+        obj.__proto__ = cont.prototype;
+        cont.call(obj, arguments);
+        return obj;
+      }
+    </script>
+  </body>
+</html>

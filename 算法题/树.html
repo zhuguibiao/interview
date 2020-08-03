@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // function Node(data, left, right) {
+      //   this.data = data;
+      //   this.left = left;
+      //   this.right = right;
+      // }
+      // function BST() {
+      //   this.root = null;
+      // }
+      // BST.prototype.insert = function (data) {
+      //   var node = new Node(data, null, null);
+      //   if (this.root == null) {
+      //     this.root = node;
+      //   } else {
+      //     var current = this.root;
+      //     var parent;
+      //     while (true) {
+      //       parent = current;
+      //       if (data < current.data) {
+      //         current = current.left;
+      //         if (current == null) {
+      //           parent.left = node;
+      //           break;
+      //         }
+      //       } else {
+      //         current = current.right;
+      //         if (current == null) {
+      //           parent.right = node;
+      //           break;
+      //         }
+      //       }
+      //     }
+      //   }
+      // };
+
+      // function fn(arr) {
+      //   var bst = new BST();
+      //   for (var i = 0; i < arr.length; i++) {
+      //     bst.insert(arr[i]);
+      //   }
+      //   console.log(bst.root);
+      // }
+      // /**
+      //  * @param {string} pattern
+      //  * @param {string} str
+      //  * @return {boolean}
+      //  * demo输入: pattern = "abba", str = "dog cat cat dog"
+      //  */
+      // var wordPattern = function (pattern, str) {
+      //   debugger;
+      //   let words = str.split(" ");
+      //   if (words.length !== pattern.length) return false;
+      //   const mapped = new Set();
+      //   const hash = {};
+      //   for (let i = 0; i < pattern.length; i++) {
+      //     const currPattern = pattern[i];
+      //     const currWord = words[i];
+      //     if (!hash[currPattern] && !mapped.has(currWord)) {
+      //       hash[currPattern] = currWord;
+      //       mapped.add(currWord);
+      //     } else if (hash[currPattern] !== currWord) {
+      //       return false;
+      //     }
+      //   }
+      //   return true;
+      // };
+      // console.log(wordPattern("abba", "dog a a dog"));
+    </script>
+  </body>
+</html>

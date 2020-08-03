@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="display:flow-root;">
+    <style>
+      .section{
+        padding: 10px;
+        margin-bottom: 20px;
+      /* border:1px solid #000; */
+      }
+      section{
+        height:150px;
+      }
+
+      .blue,
+      .red-inner {
+        height: 50px;
+        margin: 10px 0;
+      }
+
+      .blue {
+        background: blue;
+      }
+      
+      .red-outer {
+        overflow: hidden;
+        background: red;
+      }
+      .box {
+        background-color: rgb(224, 206, 247);
+        border: 5px solid rebeccapurple;
+      }
+      .box[style] {
+        background-color: aliceblue;
+        border: 5px solid steelblue;
+      }
+      .float {
+        float: left;
+        overflow: hidden; /* required by resize:both */
+        resize: both;
+        margin-right: 25px;
+        width: 200px;
+        height: 100px;
+        background-color: rgba(255, 255, 255, 0.75);
+        border: 1px solid black;
+        padding: 10px;
+      }
+      p{
+        /* border:1px solid #ddd; */
+        margin: 10px;
+      }
+    </style>
+    <h3> BFC 定义：</h3>
+      <p> BFC(Block formatting context)直译为"块级格式化上下文"。
+        它是一个独立的渲染区域，只有Block-level box参与， 
+        它规定了内部的Block-level Box如何布局，并且与这个区域外部毫不相干。</p>  
+    <h3>BFC的布局规则：</h3>
+      <ul>
+        <li>
+        <p>内部的Box会在垂直方向，一个接一个地放置。</p>
+        </li>
+        <li>
+        <p>Box垂直方向的距离由margin决定。属于<strong>同一个</strong>BFC的两个相邻Box的margin会发生重叠。</p>
+        </li>
+        <li>
+        <p>每个盒子（块盒与行盒）的margin box的左边，与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。</p>
+        </li>
+        <li>
+        <p>BFC的区域不会与float box重叠。</p>
+        </li>
+        <li>
+        <p>BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。</p>
+        </li>
+        <li>
+        <p>计算BFC的高度时，浮动元素也参与计算。</p>
+        </li>
+        </ul>
+    <div class="section">
+      <p>1</p>
+      <div style="display: flow-root;">
+        <p>2</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>1、包含内部浮动：</h4>
+      <section>
+        <div class="box">
+          <div class="float">I am a floated box!</div>
+          <p>I am content inside the container.</p>
+        </div>
+      </section>
+      <section>
+        <div class="box" style="overflow: auto;">
+          <div class="float">I am a floated box!</div>
+          <p>I am content inside the <code>overflow:auto</code> container.</p>
+        </div>
+      </section>
+    </div>
+   
+    <div class="section">
+      <h4>2、排除外部浮动:</h4>
+     
+      <section>
+        <div class="float">Try to resize this outer float</div>
+        <div class="box"><p>Normal</p></div>
+      </section>
+      <section>
+        <div class="float">Try to resize this outer float</div>
+        <div class="box" style="display: flow-root;">
+          <p><code>display:flow-root</code></p>
+          <div></p>
+        </div>
+      </section>
+    </section>
+    
+
+
+
+    <div class="section">
+      <h4>3、重叠外边距解决：</h4>
+      <div class="blue"></div>
+      <div class="red-outer">
+        <div class="red-inner">red inner</div>
+      </div>
+    </div>
+
+
+    <style>
+      .left_demo::after{
+        content: "";
+        display: block; 
+        clear: both;
+        /* display: flow-root; */
+      }
+      .float-l{
+        float: left;
+        border :1px solid red
+      }
+      .flow{
+        display: flow-root;
+      }
+      .brother{
+        /* display: flow-root; */
+        /* clear: left; */
+        border: 1px solid blue;
+      }
+    </style>
+    <div class="section">
+      <h4>4、父元素浮动了，子元素形成BFC能清除浮动么</h4>
+      <div class="left_demo">
+        <div class="float-l">
+          我是浮动的父级
+          <p class="flow">
+            我是独立的BFC子集
+          </p>
+        </div>
+        <div class="brother">我是兄弟</div>
+      </div>
+    </div>
+
+
+
+    <div class="section">
+      <style>
+        .wrapper{
+          border:1px solid black;
+          padding:10px;
+        }
+        .both {
+          border: 1px solid black;
+          clear: left;
+          /* clear: right; */
+          /* clear: both; */
+        }
+        .black {
+          float: left;
+          margin: 0;
+          background-color: black;
+          color: #fff;
+          width:20%;
+        }
+        .red {
+          float: right;
+          margin: 0;
+          background-color: pink;
+          width:20%;
+        }
+       .wrapper p {
+          width: 45%;
+        }
+      </style>
+      <h4>5、clear的用法</h4>
+      <div class="wrapper">
+        <p class="black">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus sit amet diam. Duis mattis varius dui. Suspendisse eget dolor. Fusce pulvinar lacus ac dui.</p>
+        <p class="red">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus sit amet diam. Duis mattis varius dui. Suspendisse eget dolor.</p>
+        <p class="both">This paragraph clears both.</p>
+      </div>
+    </div>
+
+
+  </body>
+</html>

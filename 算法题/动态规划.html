@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 斐波拉契数列Fibonacci
+      function fibonacci(i) {
+        if (i == 0 || i == 1) {
+          return 1;
+        }
+        return fibonacci(i - 1) + fibonacci(i - 2);
+      }
+      function fibonacci2(i) {
+        if (i == 0 || i == 1) {
+          return 1;
+        }
+        return fibonacci(i + 1);
+      }
+      // console.log(fibonacci(3));
+      // 求不相邻最大值方案
+      // [1,2,4,1,7,8,3]
+      var arr = [1, 2, 4, 1, 7, 8, 3];
+      var A = 0;
+      var B = 0;
+      function fib(arr, i) {
+        if (i === 0) {
+          return arr[0];
+        } else if (i === 1) {
+          return Math.max(arr[1], arr[0]);
+        }
+        // 选i
+        A = fib(arr, i - 2) + arr[i];
+        // 不选i arr[i - 2];
+        B = fib(arr, i - 1);
+        return Math.max(A, B);
+      }
+
+      function fib2(arr) {
+        var pre = 0;
+        var result = arr[0];
+        for (var i = 2; i < arr.length; i++) {
+          // 选i
+          A = result(arr, i - 2) + arr[i];
+          // 不选i arr[i - 2];
+          B = result(arr, i - 1);
+        }
+
+        return Math.max(A, B);
+      }
+
+      var result = fib(arr, arr.length - 1);
+      // console.log(A, B);
+      console.log(result);
+    </script>
+  </body>
+</html>

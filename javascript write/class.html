@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+
+      /*  几个方法和概念
+        * 1、Object.create(proto,{propertiesObject})：
+            方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__
+
+        * 2、instanceof: 
+              用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上。
+              https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof
+
+        * 3、hasOwnProperty
+        *
+        *
+        *
+        *
+      */
+      function _classCallCheck(instance, Constructor) {
+          // this A
+        if (!instance instanceof Constructor) {
+          throw new TypeError("Cannot call a class as a function");
+        }
+      }
+
+      /*
+        class Point {
+          constructor(x, y) {
+            this.x = x;
+            this.y = y;
+          }
+
+          toString() {
+            return '(' + this.x + ', ' + this.y + ')';
+          }
+        }
+      */
+      // 实现class 和extends
+      // 这个是要实现的方法
+
+      // function _inheritsLoose(subClass, superClass) {
+      //   subClass.prototype = Object.create(superClass.prototype);
+      //   subClass.prototype.constructor = subClass;
+      //   subClass.__proto__ = superClass;
+      // }
+
+      function Point() {
+        this.x = x;
+        this.y = y;
+      }
+      Point.prototype.toString = function () {
+        return "(" + this.x + ", " + this.y + ")";
+      };
+
+      // createClass = function (sons) {
+      //   // TODO
+      //   return sons;
+      // };
+
+      // 这是个 es6 的一个例子，要实现 extends 的功能。
+      // class Man extends Human {
+      //   cons(args) {
+      //     super(args);
+      //     // xxxxx
+      //   }
+      //   speak() {
+      //     console.log("");
+      //   }
+      // }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*  面试题46. 把数字翻译成字符串
+      给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
+      示例 1:
+      输入: 12258
+      输出: 5
+      解释: 12258有5种不同的翻译，分别是"bccfi", "bwfi", "bczi", "mcfi"和"mzi".
+      */
+
+      /**
+       * @param {number} num
+       * @return {number}
+       */
+      /* 思考：
+        0,1,2,,,23,24,25
+        1位 2位
+       */
+      // 递归
+      var translateNum = function (num) {
+        debugger;
+        const str = num.toString();
+        const n = str.length;
+        const dp = new Array(n + 1);
+        dp[0] = 1;
+        dp[1] = 1;
+        for (let i = 2; i < n + 1; i++) {
+          const temp = Number(str[i - 2] + str[i - 1]);
+          if (temp >= 10 && temp <= 25) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+          } else {
+            dp[i] = dp[i - 1];
+          }
+        }
+        return dp[n]; // 翻译前n个数的方法数，即翻译整个数字
+      };
+      // console.log(translateNum(3));
+      // console.log(translateNum(1234321));
+
+      /**
+       * @param {number} x
+       * @return {number}
+       */
+      var mySqrt = function (x) {
+        if (x == 0 || x == 1) {
+          return x;
+        }
+        var left = 0,
+          right = x;
+        while (left < right) {
+          var mid = (left + right) / 2;
+          if (mid * mid === x) {
+            return mid;
+          } else if (mid * mid < x) {
+            left = mid + 1;
+          } else {
+            right = mid;
+          }
+        }
+        return left - 1;
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function Foo() {
+        getName = function () {
+          console.log(1);
+        };
+        return this;
+      }
+      Foo.getName = function () {
+        console.log(2);
+      };
+      Foo.prototype.getName = function () {
+        console.log(3);
+      };
+      var getName = function () {
+        console.log(4);
+      };
+      function getName() {
+        console.log(5);
+      }
+
+      // 请写出以下输出结果
+
+      Foo.getName();
+      // 结果：2 直接调用Foo下面的getName()
+
+      getName();
+      /* 结果： 4
+      function getName 提升到最上面,var getName = function () {console.log(4)} 等价于  var getName提升到上面，
+      然后赋值为 function () {console.log(4)}，所以直接console.log 4
+      */
+
+      Foo().getName();
+      /*
+      结果： 1
+      Foo()调用的时候，return this就是windows 因为没有new操作，this默认指向windows
+          里面的getName =...  相当于把全局变量getName赋值成新的函数了。
+          然后这句的意思就变成了  this.getName()      
+      */
+      getName();
+      /*
+      结果： 1
+      同上，因为上面的代码运行后， 全局的getName方法 已经变成 console.log(1)
+      */
+
+      new Foo.getName();
+      /*
+         结果：2
+        new 实例化构造函数
+         原代码相当于 new (Foo.getName())
+        及先调用Foo.getName() 然后再new
+        Foo.getName() 是一个方程 function(){console.log(2)}
+        再new 直接调用这个方法，打印2
+      */
+
+      new Foo().getName();
+      /*
+         结果：3 
+        原代码 (new Foo()).getName();
+      */
+
+      new new Foo().getName();
+      /*
+         结果：3
+         源代码 new (new Foo()).getName();
+      */
+
+      var obj = {
+        a: {
+          f: function () {
+            return function (config) {
+              console.log(this);
+            };
+          },
+        },
+      };
+      var type = "a";
+      var config = {};
+      var c = obj[type].f();
+      //  new obj.a.f()({})
+    </script>
+  </body>
+</html>

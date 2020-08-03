@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {number[]} nums
+       * @param {number} val
+       * @return {number}
+       */
+      var removeElement = function (nums, val) {
+        let index = 0,
+          last = nums.length - 1;
+        while (index <= last) {
+          if (nums[index] === val) {
+            nums[index] = nums[last];
+            last--;
+          } else {
+            index++;
+          }
+        }
+        return index;
+      };
+      removeElement([3, 1, 2, 1, 2, 2, 3], 3);
+    </script>
+  </body>
+</html>
