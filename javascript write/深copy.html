@@ -8,28 +8,36 @@
   <body>
     <script>
       /*
-        浅copy
-      */
+              浅copy
+            */
       var a = { b: 1 };
       // 1、Object.assign   （单层简单数据类型深copy）
       // 2、扩展运算符
 
       /*
-       *深copy 
-       a = {
-         b: [
-            {c:1}
-         ]
-       }
-       */
-      function deepCopy(p) {
-        var c = Array.isArray(p) ? [] : {};
+             *深copy
+             a = {
+               b: [
+                  {c:1}
+               ]
+             }
+             */
 
+      var a = {
+        c: { b: 1 },
+      };
+      var c = deepCopy(a);
+
+      function deepCopy(p, hash = new WeakMap()) {
+        var c = Array.isArray(p) ? [] : {};
+        if (hash.has(obj)) return hash.get(obj);
+        hash.set(obj, cloneObj);
+        
         // 获取Symbol
         let symKeys = Object.getOwnPropertySymbols(p);
         // 获取源对象所有属性描述符
-        let allDesc = Object.getOwnPropertyDescriptors(obj);
-        
+        let allDesc = Object.getOwnPropertyDescriptors(p);
+
         if (symKeys.length > 0) {
           symKeys.forEach((symKey) => {
             if (typeof p[symKey] === "object") {
@@ -40,37 +48,37 @@
           });
         }
         c = Object.create(Object.getPrototypeOf(c), allDesc);
-
         for (let i in p) {
           if (typeof p[i] === "object") {
-            deepCopy(obj[i]);
+            c[i] = deepCopy(p[i]);
           } else {
             c[i] = p[i];
           }
         }
+        console.log(c);
+
         return c;
       }
 
       // 继承
       // 1
-      function F() {}
+      // function F() {}
+      // function c(x) {
+      //   F.apply(this, x);
+      // }
+      
+      // // 2
+      // c.prototype = F.prototype;
 
-      function c(x) {
-        F.apply(this, x);
-      }
+      // // 3
+      // c.prototype = new F();
+      // c.prototype.constructor = c;
 
-      // 2
-      c.prototype = F.prototype;
-
-      // 3
-      c.prototype = new F();
-      c.prototype.constructor = c;
-
-      // 4
-      function Empty() {}
-      Empty.prototype = F.prototype;
-      c.prototype = new Empty();
-      c.prototype.constructor = c;
+      // // 4
+      // function Empty() {}
+      // Empty.prototype = F.prototype;
+      // c.prototype = new Empty();
+      // c.prototype.constructor = c;
 
       // 5 循环赋值
     </script>

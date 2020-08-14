@@ -18,6 +18,16 @@ function debounce(fn, wait) {
     timer = setTimeout(fn, wait);
   };
 }
+function throttle(fn, delay) {
+  let canUse = true;
+  return function () {
+    if (canUse) {
+      fn.apply(this, arguments);
+      canUse = false;
+      setTimeout(() => (canUse = true), delay);
+    }
+  };
+}
 
 // 时间戳版
 function throttle(func, wait) {

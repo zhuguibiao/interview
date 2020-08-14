@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .cont {
+        width:50%;
+        height: 0;
+        border: 1px solid #ccc;
+        position: relative;
+        overflow: hidden;
+        padding-top: 50%;
+      }
+      .cont div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <div class="cont">
+      <div>
+        第一种方式实现：<br />
+        父元素没有高度，用padding撑开，相对定位;<br />
+        然后子元素，绝对定位，top0，宽和高都100%即可。
+      </div>
+    </div>
+
+    <style>
+      .cont2 {
+        margin-top: 20px;
+        width: 50vw;
+        border: 1px solid #ccc;
+        height: 100vw;
+      }
+    </style>
+    <div class="cont2">
+      第二种方式实现：用到了vw单位
+    </div>
+
+    <style>
+      .cont3 {
+        margin-top: 20px;
+        width: 50%; 
+        border: 1px solid #ccc;
+        /* aspect-ratio: <width-ratio>/<height-ratio> */
+        height: auto;
+        aspect-ratio: 1 / 2;
+      }
+    </style>
+    <div class="cont3">
+      第三种方式实现：直接用css4的
+      <a href="https://drafts.csswg.org/css-sizing-4/#ratios">aspect-ratio</a>
+      注意：这种方式有些浏览器还没有实现
+    </div>
+  </body>
+</html>
