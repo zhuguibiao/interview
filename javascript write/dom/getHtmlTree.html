@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      window.onload = function () {
+        /**
+         * html获取所有节点
+         * 获取最大子节点的数量
+         */
+        function getRootTree() {
+          const rootNode = document.querySelector("html");
+          let nodeCounts = 1; // 所有节点数量，初始值为1。
+          let maxChildCounts = -Infinity; // 最大子节点数量，默认最小值。
+          depTree(rootNode);
+
+          function depTree(node) {
+            if (node.childElementCount) {
+              nodeCounts += node.childElementCount;
+              maxChildCounts = Math.max(maxChildCounts, node.childElementCount);
+            }
+            if (node.children.length) {
+              for (var i = 0; i < node.children.length; i++) {
+                depTree(node.children[i]);
+              }
+            }
+          }
+          return { nodeCounts, maxChildCounts };
+        }
+
+        function getRootTree2() {
+          // debugger
+          let rootNode = document.querySelector("html");
+          let nodeList = document.querySelector("html").children;
+          let stack = [...nodeList];
+          let nodeCounts = 1 + rootNode.childElementCount;
+          let maxChildCounts = rootNode.childElementCount;
+
+          while (stack.length) {
+            const item = stack.pop(); // 取出最后一项
+            if (item.children.length) {
+              // 如果存在children
+              nodeCounts += item.childElementCount;
+              maxChildCounts = Math.max(maxChildCounts, item.childElementCount);
+              stack.push(...item.children);
+            } 
+          }
+          return { nodeCounts, maxChildCounts };
+        }
+        // const nodeInfo = getRootTree();
+        // console.log(nodeInfo)
+
+        const nodeInfo = getRootTree2();
+        console.log(nodeInfo);
+      };
+    </script>
+  </body>
+</html>

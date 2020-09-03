@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var compose = function (f, g) {
+        return function (x) {
+          return f(g(x));
+        };
+      };
+      var toUpperCase = function (x) {
+        return x.toUpperCase();
+      };
+      var exclaim = function (x) {
+        return x + "!";
+      };
+      var shout = compose(exclaim, toUpperCase);
+
+      var a = shout("send in the clowns");
+
+      
+    </script>
+  </body>
+</html>

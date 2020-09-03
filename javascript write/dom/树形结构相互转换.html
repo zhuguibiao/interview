@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var treeArr = [
+        { id: 1, pid: 0, value: 1 },
+        { id: 11, pid: 1, value: 11 },
+        { id: 12, pid: 1, value: 12 },
+        { id: 18, pid: 12, value: 18 },
+        { id: 13, pid: 0, value: 13 },
+      ];
+
+      /**
+       * 一维列表转成树形结构
+       * @param list
+       */
+      function listToTree(list) {
+        var map = {},
+          node,
+          tree = [],
+          i;
+        for (i = 0; i < list.length; i++) {
+          // {1: {,children:[]},11:{children:[]},18:{children:[]}}
+          map[list[i].id] = list[i];
+          list[i].children = [];
+        }
+        for (i = 0; i < list.length; i += 1) {
+          node = list[i];
+          if (node.pid !== 0) {
+            map[node.pid].children.push(node);
+          } else {
+            tree.push(node);
+          }
+        }
+        return tree;
+      }
+
+      let tree = listToTree(treeArr);
+      // console.log(tree)
+
+      /**
+       * 树转一维列表
+       * @param tree
+       */
+      function treeToList(tree) {
+        var stack = [...tree];
+        var result = [];
+        while (stack.length) {
+          var temp = stack.pop(); // 取出最后一项
+          if (temp.children.length) {
+            // 如果有children
+            result.push({ ...temp, children: [] });
+            stack.push(...temp.children);
+          } else {
+            result.push(temp);
+          }
+        }
+        return result;
+      }
+      var treeList = treeToList(tree);
+      // console.log(treeList);
+
+      /**
+       * 给出树和id 找到对应项
+       * @param tree
+       * @param id
+       */
+      function treeQuery(tree, id) {
+        var stack = [...tree];
+        while (stack.length) {
+          var temp = stack.pop(); // 取出最后一项
+          if (temp.children.length) {
+            // 如果有children
+            stack.push(...temp.children);
+          }
+          if (temp.id === id) {
+            return temp;
+          }
+        }
+      }
+      var queryId = treeQuery(treeList, 1);
+      console.log(queryId);
+
+      
+    </script>
+  </body>
+</html>
