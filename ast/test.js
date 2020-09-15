@@ -7,12 +7,14 @@ const {
 } = require('./the-super-tiny-compiler');
 const assert = require('assert');
 
+
+
 const input  = '(add 2 (subtract 4 2))';
 const output = 'add(2, subtract(4, 2));';
 
-console.log(tokenizer('(add 2 (subtract 4 2))'));
-console.log(tokenizer('var a = 1'));
-console.log(parser(tokenizer('(add 2 (subtract 4 2))')));
+// console.log(tokenizer('(add 2 (subtract 4 2))'));
+// console.log(tokenizer('var a = 1'));
+// console.log(parser(tokenizer('(add 2 (subtract 4 2))')));
 
 const tokens = [
   { type: 'paren',  value: '('        },
@@ -85,4 +87,8 @@ assert.deepStrictEqual(transformer(ast), newAst, 'Transformer should turn `ast` 
 assert.deepStrictEqual(codeGenerator(newAst), output, 'Code Generator should turn `newAst` into `output` string');
 assert.deepStrictEqual(compiler(input), output, 'Compiler should turn `input` into `output`');
 
+console.log(parser(tokens))
+console.log(transformer(ast))
+console.log(codeGenerator(newAst))
+console.log(compiler(input))
 console.log('All Passed!');
