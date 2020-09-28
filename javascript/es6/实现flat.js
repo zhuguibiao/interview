@@ -31,7 +31,5 @@ function stackFlatDeep(input) {
   return res.reverse();
 }
 
-// var reduceResult = reduceFlatDeep(arr, 10);
 var stackResult = stackFlatDeep(arr, 10);
-// console.log(result);
 console.log(stackResult);

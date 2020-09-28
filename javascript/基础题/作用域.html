@@ -7,7 +7,7 @@
   </head>
   <body>
     <script>
-    /* 第一题、函数作用域，IEFF自执行函数作用域问题
+      /* 第一题、函数作用域，IEFF自执行函数作用域问题
       var a = 1;
       (function a() {
         var a; // 这个a是var 变成函数局部变量，后面的a就是这里定义的a
@@ -32,37 +32,36 @@
            在理解作用域链之前，先介绍一下作用域，作用域可以理解为执行上下文中申明的变量和作用的范围；包括块级作用域/函数作用域；
         特性：声明提前：一个声明在函数体内都是可见的，函数声明优先于变量声明；
           在非匿名自执行函数中，函数变量为只读状态无法修改；
-      */  
+      */
 
-      // 第二题、this指向问题
-      // var number = 10;
+      // let 定义的是块级作用域的，不会绑定要window全局。
+      // let number = 1;
       // function fn() {
       //   console.log(this.number);
       // }
-      // var obj = {
+      // let obj = {
       //   number: 2,
       //   show: function (fn) {
-      //     this.number = 3;
-      //     fn();
-      //     console.log(arguments[0])
-      //     arguments[0]();
+      //     fn(); // 这里调用，相当于window.fn()，this是window，但window.number 没有，所以返回undefine
+      //     arguments[0]();// 这里调用this是arguments，arguments没有number属性，所以返回undefine
       //   },
       // };
       // obj.show(fn);
-      // 10 ,undefined
+
+      // undefined ,undefined
+
 
       // 第三题
-      // async function a() {
-      //   var result = Promise.reject();
-      //   result.about = function () {
+      async function a() {
+        var result = Promise.reject();
+        result.about = function () {
+          console.log(1);
+        };
+        return result;
+      }
+      var b = a();
 
-        
-      //     console.log(1);
-      //   };
-      //   return result;
-      // }
-      // var b = a();
-      // console.log(b);
+      console.log(b);
 
       // 第四题 :自执行函数，
     </script>

@@ -6,6 +6,7 @@
     <title>Document</title>
   </head>
   <body>
+    <script src="./eventHub.js"></script>
     <script>
       var compose = function (f, g) {
         return function (x) {
@@ -21,8 +22,8 @@
       var shout = compose(exclaim, toUpperCase);
 
       var a = shout("send in the clowns");
-
       
     </script>
   </body>
 </html>
+

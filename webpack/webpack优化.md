@@ -1,12 +1,10 @@
 # webpakc优化
-
 # 一、优化构建速度（打包时的优化）
 1.2 使用DllPlugin减少基础模块编译次数
 1.3 使用HappyPack开启多进程Loader转换
 1.4 使用ParallelUglifyPlugin开启多进程压缩JS文件
 ## 1.1、打包时开启缓存
-    缓存开启时，会在node_modules下创建.cache的文件夹，缓存文件会存放在里面。
-    开启缓存后，二次构建代码时会优化打包时间。
+    缓存开启时，会在node_modules下创建.cache的文件夹，缓存文件会存放在里面。开启缓存后，二次构建代码时会优化打包时间。
  1. 像一些webpack loader都会自带缓存处理
     如：**babel-loader** 开启缓存 
  ```js
@@ -18,7 +16,6 @@
     ]
 ```
  2. 代码压缩时候，可以使用terser-webpack-plugin开启缓存
- 
  3. 使用 cache-loader 或者 hard-source-webpack-plugin
 
 ### 1.2、缩小构建的目标
