@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function memorize(fn) {
+        const cache = Object.create(null); // 存储缓存数据的对象
+        return function (...args) {
+          const _args = JSON.stringify(args);
+          return cache[_args] || (cache[_args] = fn.apply(fn, args));
+        };
+      }
+
+      let complexCalc = (a, b) => {
+        // 执行复杂的计算
+        return a + b;
+      };
+
+      let memoCalc = memorize(complexCalc);
+      memoCalc(666, 888);
+      memoCalc(666, 888); // 从缓存中获取
+    </script>
+  </body>
+</html>

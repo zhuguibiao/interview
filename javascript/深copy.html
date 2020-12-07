@@ -1,63 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
   <body>
     <script>
-      /*
-              浅copy
-            */
-      var a = { b: 1 };
+      /**
+       * 浅copy
+       */
+      var qian = { b: 1 };
       // 1、Object.assign   （单层简单数据类型深copy）
       // 2、扩展运算符
-
       /*
-      *深copy
-      a = {
-        b: [
-          {c:1}
-        ]
-      }
+       * 深copy
+          a = {
+            b: [
+              {c:1}
+            ]
+          }
       */
 
-      var a = {
-        c: { b: 1 },
+      function Test() {}
+      Test.prototype.name = "深拷贝";
+      Test.prototype.getName = function () {
+        console.log(this.name);
       };
-      var c = deepCopy(a);
+      var deepObj = new Test();
 
-      function deepCopy(p, hash = new WeakMap()) {
-        var c = Array.isArray(p) ? [] : {};
-        if (hash.has(obj)) return hash.get(obj);
-        hash.set(obj, cloneObj);
+      /**
+       * 测试属性包含：
+       * 基本类型、单层obj、多层obj、symbol、不可枚举、函数类型、特殊对象、循环引用自己、描述类型
+       */
+      var test = {
+        a: 1,
+        b: { b: 1 },
+        c: { c: { c: 1 } },
+        d: function d() {},
+        e: new Date(), // date
+        f: new RegExp(/这是一个正则/),
+        [Symbol("我是一个Symbol")]: "Symbol",
+      };
+      deepObj = Object.assign(deepObj, test); // 链接测试类型
+      deepObj.ziji = deepObj; // 重复自己
 
-        // 获取Symbol
-        let symKeys = Object.getOwnPropertySymbols(p);
-        // 获取源对象所有属性描述符
-        let allDesc = Object.getOwnPropertyDescriptors(p);
+      Object.defineProperties(deepObj, {
+        test: {
+          writable: false,
+          value: 1,
+        },
+        arr: {
+          get() {
+            return [1, 2, 3];
+          },
+          set(val) {},
+        },
+      });
 
-        if (symKeys.length > 0) {
-          symKeys.forEach((symKey) => {
-            if (typeof p[symKey] === "object") {
-              deepCopy(obj[symKey]);
-            } else {
-              c[symKey] = p[symKey];
-            }
-          });
-        }
-        c = Object.create(Object.getPrototypeOf(c), allDesc);
-        for (let i in p) {
-          if (typeof p[i] === "object") {
-            c[i] = deepCopy(p[i]);
-          } else {
-            c[i] = p[i];
+      var result = deepClone(deepObj);
+      console.log(`old obj：`, deepObj);
+      console.log(`keys：`, Reflect.ownKeys(deepObj));
+      console.log(`new obj：`, result);
+
+      /*  function deepClone(objs) {
+        // var objs = Object.create(objs.__proto__);
+        var result = clone(objs);
+
+        let childTest = Object.create(objs);
+        var 啊 = 1;
+        function clone(obj, map = new WeakMap()) {
+          // 判断是否是obj
+          if (obj === null || typeof obj !== "object") {
+            return obj;
           }
-        }
-        console.log(c);
+          // 判断map里面有没有自身
+          if (map.has(obj)) {
+            return map.get(obj);
+          }
+          const copy = Array.isArray(obj) ? [] : {};
+          map.set(obj, copy);
 
-        return c;
+          const keys = Reflect.ownKeys(obj);
+          keys.forEach((key) => {
+            copy[key] = clone(obj[key], map);
+          });
+          return copy;
+        }
+
+        return result;
+      }
+ */
+      function deepClone(obj, hash = new WeakMap()) {
+        function isObject(o) {
+          return (
+            (typeof o === "object" || typeof o === "function") && o !== null
+          );
+        }
+        if (!isObject(obj)) {
+          return obj;
+        }
+        // 查表，防止循环拷贝
+        if (hash.has(obj)) return hash.get(obj);
+
+        let isArray = Array.isArray(obj);
+        // 初始化拷贝对象
+        let cloneObj = isArray ? [] : {};
+        // 哈希表设值
+        hash.set(obj, cloneObj);
+        // 获取源对象所有属性描述符
+        let allDesc = Object.getOwnPropertyDescriptors(obj);
+
+        // 设置原型
+        if (typeof Reflect.getPrototypeOf(obj) !== "function") {
+          Reflect.setPrototypeOf(cloneObj, Reflect.getPrototypeOf(obj));
+        }
+        // 拷贝可枚举属性
+        const keys = Reflect.ownKeys(obj);
+        keys.forEach((key) => {
+          cloneObj[key] = deepClone(obj[key], hash);
+        });
+
+        return cloneObj;
       }
 
       // 继承
@@ -79,8 +138,6 @@
       // Empty.prototype = F.prototype;
       // c.prototype = new Empty();
       // c.prototype.constructor = c;
-
-      // 5 循环赋值
     </script>
   </body>
 </html>

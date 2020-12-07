@@ -25,24 +25,25 @@
        * @param params
        * @param time
        */
-      // const debounce = (fn, time = 500) => {
-      //   // console.log(this);
-      //   return function () {
-      //     // console.log(this);
-      //     if (fn.id) {
-      //       clearTimeout(fn.id);
-      //     }
-      //     fn.id = setTimeout(() => fn.apply(this, arguments), time);
-      //   };
-      // };
-      // let debounceInput = document.querySelector(".debounce");
 
-      // function b(e) {
-      //   console.log(this);
-      //   console.log(e.target.value);
-      // }
-      // let a = debounce(b);
-      // debounceInput.addEventListener("keyup", a);
+      const debounce = (fn, wait = 500) => {
+        let timer = null;
+        return function () {
+          if (timer) {
+            clearTimeout(timer);
+          }
+          timer = setTimeout(() => fn.apply(this, arguments), wait);
+        };
+      };
+
+      let debounceInput = document.querySelector(".debounce");
+
+      function b(e) {
+        console.log(this);
+        console.log(e.target.value);
+      }
+      let a = debounce(b);
+      debounceInput.addEventListener("keyup", a);
 
       // 节流
       // console.log(a);
@@ -384,7 +385,7 @@
           temp[nums[i]] = i;
         }
       };
-      console.log(twoSum((nums = [1, 2, 2, 2, 2, 7, 11, 15]), (target = 13)));
+      // console.log(twoSum((nums = [1, 2, 2, 2, 2, 7, 11, 15]), (target = 13)));
     </script>
   </body>
 </html>

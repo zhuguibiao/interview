@@ -8,23 +8,24 @@
  * 如我连续输入100次，只要输入的间隔没有超过500ms 就不执行，最后执行一次。
  */
 
-function debounce(fn, wait) {
+const debounce = (fn, wait = 500) => {
   let timer = null;
-  return () => {
-    console.log(this);
+  return function () {
     if (timer) {
       clearTimeout(timer);
     }
-    timer = setTimeout(fn, wait);
+    timer = setTimeout(() => fn.apply(this, arguments), wait);
   };
-}
-function throttle(fn, delay) {
-  let canUse = true;
+};
+
+function throttle(func, wait) {
+  let timer;
   return function () {
-    if (canUse) {
-      fn.apply(this, arguments);
-      canUse = false;
-      setTimeout(() => (canUse = true), delay);
+    if (!timer) {
+      timer = setTimeout(() => {
+        timer = null;
+        func.apply(this, arguments);
+      }, wait);
     }
   };
 }

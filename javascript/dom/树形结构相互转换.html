@@ -84,9 +84,54 @@
         }
       }
       var queryId = treeQuery(treeList, 1);
-      console.log(queryId);
+      // console.log(queryId);
 
-      
+      var arr = [
+        {
+          name: "A",
+          pid: 0,
+          id: 1,
+        },
+        {
+          name: "B",
+          pid: 0,
+          id: 2,
+        },
+        {
+          name: "C",
+          pid: 0,
+          id: 3,
+        },
+        {
+          name: "A-1",
+          pid: 1,
+          id: 4,
+        },
+        {
+          name: "B-1",
+          pid: 2,
+          id: 5,
+        },
+      ];
+
+      var arr2 = []; // 输出结果的数组
+
+      for (const key in arr) {
+        if (arr[key].pid == 0) {
+          if (arr2[arr[key].id] === undefined) {
+            arr2[arr[key].id] = [arr[key]];
+          } else {
+            arr2[arr[key].id].unshift(arr[key]);
+          }
+        } else {
+          if (arr2[arr[key].pid] === undefined) {
+            arr2[arr[key].pid] = arr[key];
+          } else {
+            arr2[arr[key].pid].push(arr[key]);
+          }
+        }
+      }
+      console.log(arr2)
     </script>
   </body>
 </html>

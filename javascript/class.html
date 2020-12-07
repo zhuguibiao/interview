@@ -7,7 +7,6 @@
   </head>
   <body>
     <script>
-
       /*  几个方法和概念
         * 1、Object.create(proto,{propertiesObject})：
             方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__
@@ -20,7 +19,7 @@
         *
       */
       function _classCallCheck(instance, Constructor) {
-          // this A
+        // this A
         if (!instance instanceof Constructor) {
           throw new TypeError("Cannot call a class as a function");
         }
@@ -69,6 +68,33 @@
       //     console.log("");
       //   }
       // }
+
+      function fn() {
+        console.log(1);
+        setTimeout(() => {
+          console.log(2);
+        }, 1000);
+      }
+      fn();
+      setTimeout(() => {
+        console.log(3);
+      });
+      new Promise((res) => {
+        console.log(4);
+        setTimeout(() => {
+          console.log(5);
+        }, 100);
+        res();
+      }).then(() => {
+        setTimeout(() => {
+          console.log(6);
+        }, 0);
+        console.log(7);
+      });
+      console.log(8);
+      
+      // 1 4 8 3 5 7 6 2
+      // 1 4 8 7 3 6 5 2
     </script>
   </body>
 </html>
