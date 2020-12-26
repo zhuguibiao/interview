@@ -55,6 +55,14 @@
         return result;
       };
 
+      var a = { b: 1 };
+      function c(arg1, arg2, arg3) {
+        console.log(this.b + arg1 + arg2 + arg3);
+      }
+      c();
+      c.myCall(a);
+      c.myCall(a, 1, 2, 3);
+
       /* 手写myApply
        * 区别是后面的是数组，而不是单个参数
        */
@@ -76,7 +84,6 @@
       Object.prototype.toString.myCall([]);
       Object.prototype.toString.myApply([]);
 
-      
       /* Bind：改变函数运行的this
        * a.bind(c)
        * a目前是this，传入c
