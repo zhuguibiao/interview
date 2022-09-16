@@ -40,16 +40,9 @@ var Stack = function () {
   };
 };
 
-var stack = new Stack();
-stack.push(2);
-stack.push(1);
-stack.push(3);
-stack.push(4);
-
 /**
  * 经典十进制转二进制问题
  */
-
 var divBy2 = function (decNumber) {
   const remStack = new Stack();
   let number = decNumber;
@@ -65,6 +58,12 @@ var divBy2 = function (decNumber) {
   }
   return binaryString;
 };
+
+var stack = new Stack();
+stack.push(2);
+stack.push(1);
+stack.push(3);
+stack.push(4);
 
 // 通用进制转换函数
 function baseConverter(decNumber, base) {

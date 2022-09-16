@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    setTimeout(() => {
+      console.log('set1')
+      var P1 = new Promise(async (resolve, reject) => {
+        console.log('new P1')
+        resolve('p1')
+        // await (()=>{console.log(1)})()
+
+      });
+      var P2 = new Promise(async (resolve, reject) => {
+        console.log('new P2')
+        resolve('p2')
+        // await (()=>{console.log(2)})()
+
+      });
+      P1.then(async (res) => {
+        // console.log(res)
+        // await (()=>{console.log(3)})()
+        // return Promise.resolve(21).then(res => { console.log(res) })
+        // console.log(3.5)
+        // await (()=>{console.log(4)})()
+      })
+      P2.then(async (res) => {
+        // console.log(res)
+        await (() => { console.log(5) })()
+        console.log(5.5)
+        // await (()=>{console.log(6)})()
+      }).then(res => { console.log(6.5) }).then(res => { console.log(7.5) })
+    }, 0)
+
+    // setTimeout(() => { console.log('set2') }, 0)
+
+  </script>
+</body>
+
+</html>

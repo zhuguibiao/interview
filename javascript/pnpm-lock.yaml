@@ -1,0 +1,14 @@
+lockfileVersion: 5.3
+
+specifiers:
+  core-js: ^3.24.0
+
+dependencies:
+  core-js: 3.24.0
+
+packages:
+
+  /core-js/3.24.0:
+    resolution: {integrity: sha512-IeOyT8A6iK37Ep4kZDD423mpi6JfPRoPUdQwEWYiGolvn4o6j2diaRzNfDfpTdu3a5qMbrGUzKUpYpRY8jXCkQ==}
+    requiresBuild: true
+    dev: false

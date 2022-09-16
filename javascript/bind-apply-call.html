@@ -1,116 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      /*
-       * 手写new
-       */
-      function create() {
-        // 创建一个空的对象
-        let obj = {};
-        // 获得构造函数
-        let Con = arguments[0];
-        // 链接到原型
-        obj.__proto__ = Con.prototype;
-        // 绑定 this，执行构造函数
-        let result = Con.call(obj, arguments);
-        // 确保 new 出来的是个对象
-        return typeof result === "object" ? result : obj;
-      }
-      function a() {
-        this.a = 1;
-      }
-      a.prototype.c = function () {
-        console.log(this.a);
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /*
+     * 手写new
+     */
+    function create() {
+      // 创建一个空的对象
+      let obj = {};
+      // 获得构造函数
+      let Con = arguments[0];
+      // 链接到原型
+      obj.__proto__ = Con.prototype;
+      // 绑定 this，执行构造函数
+      let result = Con.call(obj, arguments);
+      // 确保 new 出来的是个对象
+      return typeof result === "object" ? result : obj;
+    }
+    function a() {
+      this.a = 1;
+    }
+    a.prototype.c = function () {
+      console.log(this.a);
+    };
+    var c = create(a);
+
+    var animals = [
+      { species: "Lion", name: "King" },
+      { species: "Whale", name: "Fail" },
+    ];
+
+    /* 手写call
+     * 第一个参数是需要执行call前面方法，所替换的this对象，后面的是单个参数，而不是数组
+     */
+    Function.prototype.myCall = function (suzhu) {
+      var suzhu = suzhu || window;
+      // 给 suzhu 添加一个属性
+      // call方法前面的是getValue，所以this就是getValue
+      // getValue.call(a, 'yck', '24') => a.fn = getValue
+      suzhu.fn = this;
+      // 将 suzhu 后面的参数取出来
+      var args = [...arguments].slice(1);
+      // a.fn = getValue = this  fn就是方法getValue，方法前面的a调用，this就变成了a ===>达到我们的最终目的（改变call前面方法调用的this）
+      // getValue.call(a, 'yck', '24') => a.fn('yck', '24')
+      var result = suzhu.fn(...args);
+      // 删除 fn
+      delete suzhu.fn;
+      return result;
+    };
+
+    var a = { b: 1 };
+    var b = { a: 1 };
+    function cs(arg1, arg2, arg3) {
+      console.log(this === b)
+    }
+    // cs = cs.bind(a)
+    cs.myCall(b, 1, 2, 3)
+
+    // cs.myCall(a);
+    // cs.myCall(a, 1, 2, 3);
+
+    /* 手写myApply
+     * 区别是后面的是数组，而不是单个参数
+     */
+    Function.prototype.myApply = function (suzhu) {
+      var suzhu = suzhu || window; // 宿主就是传入的第一个参数
+      // 取出方法也就是this （a.apply => this就是该方法)
+      var fn = this;
+      suzhu.fn = fn;
+      return suzhu.fn(...(arguments[1] ? arguments[1] : []));
+    };
+    // Object.prototype.toString.myCall([]);
+    Object.prototype.toString.myApply([]);
+
+    /* Bind：改变函数运行的this
+     * a.bind(c)
+     * a目前是this，传入c
+     */
+    Function.prototype.myBind = function (suzhu) {
+      var fn = this;
+      // 切割参数
+      var args = Array.prototype.slice(arguments, 1);
+      // 如果是new 操作呢，定义一个空函数载体
+      var Empty = function () { };
+      var targetFn = function () {
+        // 取当前参数
+        var arg = args.concat(Array.prototype.slice(arguments));
+        // 判断this 是不是在原型链
+        var _this = this instanceof Empty ? this : suzhu;
+        fn.apply(_this, arg);
       };
-      var c = create(a);
-
-      var animals = [
-        { species: "Lion", name: "King" },
-        { species: "Whale", name: "Fail" },
-      ];
-
-      /* 手写call
-       * 第一个参数是需要执行call前面方法，所替换的this对象，后面的是单个参数，而不是数组
-       */
-      Function.prototype.myCall = function (suzhu) {
-        var suzhu = suzhu || window;
-        // 给 suzhu 添加一个属性
-        // call方法前面的是getValue，所以this就是getValue
-        // getValue.call(a, 'yck', '24') => a.fn = getValue
-        suzhu.fn = this;
-        // 将 suzhu 后面的参数取出来
-        var args = [...arguments].slice(1);
-        // a.fn = getValue = this  fn就是方法getValue，方法前面的a调用，this就变成了a ===>达到我们的最终目的（改变call前面方法调用的this）
-        // getValue.call(a, 'yck', '24') => a.fn('yck', '24')
-        var result = suzhu.fn(...args);
-        // 删除 fn
-        delete suzhu.fn;
-        return result;
-      };
-
-      var a = { b: 1 };
-      function cs(arg1, arg2, arg3) {
-        console.log(this.b, arg1, arg2, arg3);
+      if (fn.prototype) {
+        Empty.prototype = fn.prototype;
       }
-      cs.myCall(a);
-      cs.myCall(a, 1, 2, 3);
+      targetFn.prototype = new Empty();
+      return targetFn;
+    };
 
-      /* 手写myApply
-       * 区别是后面的是数组，而不是单个参数
-       */
-      Function.prototype.myApply = function (suzhu) {
-        var suzhu = suzhu || window; // 宿主就是传入的第一个参数
-        // 取出方法也就是this （a.apply => this就是该方法)
-        var fn = this;
-        suzhu.fn = fn;
-        return suzhu.fn(...(arguments[1] ? arguments[1] : []));
-      };
-      Object.prototype.toString.myCall([]);
-      Object.prototype.toString.myApply([]);
-
-      /* Bind：改变函数运行的this
-       * a.bind(c)
-       * a目前是this，传入c
-       */
-      Array.prototype.myBind = function (suzhu) {
-        var fn = this;
-        // 切割参数
-        var args = Array.prototype.slice(arguments, 1);
-        // 如果是new 操作呢，定义一个空函数载体
-        var Empty = function () {};
-        var targetFn = function () {
-          // 取当前参数
-          var arg = args.concat(Array.prototype.slice(arguments));
-          // 判断this 是不是在原型链
-          var _this = this instanceof Empty ? this : suzhu;
-          fn.apply(_this, arg);
-        };
-        if (fn.prototype) {
-          Empty.prototype = fn.prototype;
-        }
-        targetFn.prototype = new Empty();
-        return targetFn;
-      };
-
-      /*  4步
-           创建一个对象，
-           链接到原型链
-           绑定this
-           然后return 对象
-       */
-      function news() {
-        var obj = new Object();
-        var cont = arguments[0];
-        obj.__proto__ = cont.prototype;
-        cont.call(obj, arguments);
-        return obj;
+    /**
+     * 模拟实现 new 操作符
+     * @param  {Function} ctor [构造函数]
+     * @return {Object|Function|Regex|Date|Error}      [返回结果]
+     */
+    function myNew(func) {
+      if (typeof func !== "function") {
+        throw 'newOperator function the first param must be a function';
       }
-    </script>
-  </body>
+      var newObj = Object.create(func.prototype);
+      var [, ...can] = arguments
+      var funcReturn = func.apply(newObj, can)
+      var isObject = typeof funcReturn === 'object' && funcReturn !== null;
+      var isFunction = typeof funcReturn === 'function';
+      if (isObject || isFunction) {
+        return funcReturn;
+      }
+      return newObj;
+    }
+  </script>
+
+
+<script>
+  var invoke = function (fn, args, that) {
+    var un = that === undefined;
+    switch (args.length) {
+      case 0: return un ? fn()
+        : fn.call(that);
+      case 1: return un ? fn(args[0])
+        : fn.call(that, args[0]);
+      case 2: return un ? fn(args[0], args[1])
+        : fn.call(that, args[0], args[1]);
+      case 3: return un ? fn(args[0], args[1], args[2])
+        : fn.call(that, args[0], args[1], args[2]);
+      case 4: return un ? fn(args[0], args[1], args[2], args[3])
+        : fn.call(that, args[0], args[1], args[2], args[3]);
+    }
+    return fn.apply(that, args);
+  };;
+  var arraySlice = [].slice;
+  var factories = {};
+
+  var construct = function (F, len, args) {
+    if (!(len in factories)) {
+      for (var n = [], i = 0; i < len; i++) n[i] = 'a[' + i + ']';
+      // eslint-disable-next-line no-new-func
+      factories[len] = Function('F,a', 'return new F(' + n.join(',') + ')');
+    }
+    return factories[len](F, args);
+  };
+
+  Function.prototype.bindFn = function bind(that /* , ...args */) {
+    var fn = this;
+    var partArgs = arraySlice.call(arguments, 1);
+    var bound = function (/* args... */) {
+      var args = partArgs.concat(arraySlice.call(arguments));
+      return this instanceof bound ? construct(fn, args.length, args) : fn.apply(that, args);
+    };
+    if (fn.prototype) bound.prototype = fn.prototype;
+    return bound;
+  };
+  var obj = {
+    name: '若川',
+  };
+  function original(a, b) {
+    // console.log('this', this); // original {}
+    this.name = b;
+    // console.log('name', this.name); // 2
+    // console.log('this', this);  // original {name: 2}
+    return this
+  }
+  // original.prototype.say = function () {
+  //   console.log('say')
+  // }
+
+  // var bound = original.bind(obj, 1);
+  // var bound2 = original.bindFn(obj, 1);
+
+  // console.dir(bound)
+  // console.dir(bound2)
+
+  // var newBoundResult = new bound(2)
+  // var newBoundResult2 = new bound2(2)
+
+  // console.log(newBoundResult)
+  // console.log(newBoundResult2)
+
+</script>
+</body>
+
 </html>

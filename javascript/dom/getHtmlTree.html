@@ -1,62 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      window.onload = function () {
-        /**
-         * html获取所有节点
-         * 获取最大子节点的数量
-         */
-        function getRootTree() {
-          const rootNode = document.querySelector("html");
-          let nodeCounts = 1; // 所有节点数量，初始值为1。
-          let maxChildCounts = -Infinity; // 最大子节点数量，默认最小值。
-          depTree(rootNode);
 
-          function depTree(node) {
-            if (node.childElementCount) {
-              nodeCounts += node.childElementCount;
-              maxChildCounts = Math.max(maxChildCounts, node.childElementCount);
-            }
-            if (node.children.length) {
-              for (var i = 0; i < node.children.length; i++) {
-                depTree(node.children[i]);
-              }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    window.onload = function () {
+      /**
+       * html获取所有节点
+       * 获取最大子节点的数量
+       * 获取html深度
+       */
+      function getRootTree() {
+        const rootNode = document.querySelector("html");
+        let nodeCounts = 1; // 所有节点数量，初始值为1。
+        let maxChildCounts = -Infinity; // 最大子节点数量，默认最小值。
+        depTree(rootNode);
+        function depTree(node) {
+          if (node.childElementCount) {
+            nodeCounts += node.childElementCount;
+            maxChildCounts = Math.max(maxChildCounts, node.childElementCount);
+          }
+          if (node.children.length) {
+            for (var i = 0; i < node.children.length; i++) {
+              depTree(node.children[i]);
             }
           }
-          return { nodeCounts, maxChildCounts };
         }
+        return { nodeCounts, maxChildCounts };
+      }
 
-        function getRootTree2() {
+      function getRootTree2() {
+        let rootNode = document.querySelector("html")
+        let queue = [rootNode];
+        let stack = [rootNode];
+        let nodeCounts = 1;
+        let maxChildCounts = rootNode.childElementCount;
+        let BFS_res = []
+        let DFS_res = []
+        let domDepth = 0 // 深度
+
+        // 广度优先遍历以及深度计算
+        while (queue.length) {
           // debugger
-          let rootNode = document.querySelector("html");
-          let nodeList = document.querySelector("html").children;
-          let stack = [...nodeList];
-          let nodeCounts = 1 + rootNode.childElementCount;
-          let maxChildCounts = rootNode.childElementCount;
+          ++domDepth;
+          let currentSize = queue.length;
+          // 计数器
+          let count = 0;
+          while (count < currentSize) {
+            ++count;
+            // 出队第一个入队的element
+            let item = queue.shift();
+            BFS_res.push(item)
 
-          while (stack.length) {
-            const item = stack.pop(); // 取出最后一项
-            if (item.children.length) {
-              // 如果存在children
-              nodeCounts += item.childElementCount;
-              maxChildCounts = Math.max(maxChildCounts, item.childElementCount);
-              stack.push(...item.children);
-            } 
+            if (!item.children.length) {
+              continue;
+            }
+            nodeCounts += item.childElementCount;
+            maxChildCounts = Math.max(maxChildCounts, item.childElementCount);
+            // 将子节点入队
+            queue.push(...item.children)
           }
-          return { nodeCounts, maxChildCounts };
+          // const item = queue.shift(); // 取出第一项 广度优先遍历
+          // BFS_res.push(item)
+          // if (item.children.length) {
+          //   nodeCounts += item.childElementCount;
+          //   maxChildCounts = Math.max(maxChildCounts, item.childElementCount);
+          //   queue.push(...item.children) // 广度优先遍历，入队列
+          // }
         }
-        // const nodeInfo = getRootTree();
-        // console.log(nodeInfo)
 
-        const nodeInfo = getRootTree2();
-        console.log(nodeInfo);
-      };
-    </script>
-  </body>
+        // 深度优先遍历代码
+        while (stack.length) {
+          const item2 = stack.pop(); // 取出最后一项 深度优先遍历
+          DFS_res.push(item2)
+          if (item2.children.length) {
+            stack.push(...[...item2.children].reverse())
+          }
+        }
+        return {
+          nodeCounts,
+          maxChildCounts,
+          domDepth,
+          BFS_res,
+          DFS_res,
+        };
+      }
+      const nodeInfo = getRootTree2();
+      console.log(nodeInfo);
+
+      /**
+      * 深度优先遍历计算给定DOM的最大深度,递归实现
+      * 遍历children
+      * @param domRoot
+      * @returns {*}
+      */
+      function getMaxDomTreeDepth_DFS(domRoot) {
+        var childrenDepth = [],
+          child = domRoot.firstElementChild;
+        // 如果取不到第一个子节点,则返回1
+        if (!child) return 1;
+        while (child) {
+          childrenDepth.push(getMaxDomTreeDepth_DFS(child));
+          child = child.nextElementSibling;
+        }
+        return Math.max(...childrenDepth) + 1;
+      }
+      console.log(getMaxDomTreeDepth_DFS(document.querySelector('html')))
+    };
+  </script>
+</body>
+
 </html>

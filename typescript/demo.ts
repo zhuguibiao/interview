@@ -77,7 +77,7 @@ if (isPerson(person1)) {
 }
 
 class Dog {
-  constructor(readonly name: string) {}
+  constructor(readonly name: string) { }
 
   sayHello(): string {
     return "Dog says hello!";
@@ -85,7 +85,7 @@ class Dog {
 }
 
 class Fish {
-  constructor(readonly name: string) {}
+  constructor(readonly name: string) { }
 
   dive(howDeep: number): string {
     return `Diving ${howDeep} feet`;
@@ -113,7 +113,7 @@ console.log(talkToPet(myFish));
 // Abstract classes抽象类
 // 定义一些方法给子类实现
 abstract class Person3 {
-  constructor(public name: string) {}
+  constructor(public name: string) { }
   giveDayOff() {
     console.log(`Giving a day off to ${this.name}`);
   }
@@ -423,3 +423,12 @@ const has = (value: any): value is boolean => true;
 console.log(11, has(0));
 console.log(22, has(true));
 console.log(33, has(false));
+
+
+type ElementOf<T> = T extends Array<infer E> ? E : T
+
+let a: ElementOf<['123', 231]> = '123'
+
+type c = ElementOf<string | number | [Symbol, number]>
+
+type d = ElementOf<123>

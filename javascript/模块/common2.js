@@ -1,6 +1,5 @@
 // main.js 在这个函数里加载这个模块
 var mod = require("./common1");
-
 // 手写打印导入的模块
 console.log(mod);
 
@@ -14,7 +13,9 @@ setTimeout(() => {
 }, 2000);
 
 mod.incCounter = "newFunc";
-
+module.exports = {
+  a: 1
+};
 /**
  * 结论
  * 1、commonjs 输出的是值的浅copy，基本类型修改无效，引用类型可以。

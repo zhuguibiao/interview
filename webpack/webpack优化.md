@@ -51,6 +51,24 @@
 # 三、优化输出质量-压缩文件体积
 ## 3.1 区分环境--减小生产环境代码体积
 ## 3.2 压缩代码-JS、ES、CSS
+js压缩：terser-webpack-plugin => [terser](https://github.com/terser/terser)(terser)来压缩JS
+遇到线上代码中文找不到问题：terser里面有一个配置ascii_only ==> 转中文为ascii值
+```javascript
+function toAscii(str) {
+    return str.replace(/[\u0000-\u001f\u007f-\uffff]/g, function (ch) {
+        var code = ch.charCodeAt(0).toString(16);
+        if (code.length <= 2) {
+            while (code.length < 2) code = "0" + code;
+            return "\\x" + code;
+        } else {
+            while (code.length < 4) code = "0" + code;
+            return "\\u" + code;
+        }
+    });
+}
+var s = toAscii('我') // \u6211
+```
+
 ## 3.3 使用Tree Shaking剔除JS死代码
 
 ## 3.4 scope hosting

@@ -32,21 +32,23 @@ var Tree = function () {
     }
   };
   // 搜索
-  this.search = function (value) {};
+  this.search = function (value) { };
+
   // 遍历
   var traverse = function (node, callback) {
     if (node == null) return;
-    // callback(node.value); 8 2 3 9  前序遍历
+    // callback(node.value); // 8 2 3 9  前序遍历
     traverse(node.left, callback);
-    // callback(node.value);  2 3 8 9 中序遍历
+    // callback(node.value);  // 2 3 8 9 中序遍历
     traverse(node.right, callback);
-    callback(node.value); // 3 2 8 9 后续遍历
+    callback(node.value); // 3 2 9 8 后续遍历
   };
+
   this.traverse = function (callback) {
     traverse(root, callback);
   };
   // 删除
-  this.remove = function (value) {};
+  this.remove = function (value) { };
 
   // 获取树
   this.getNode = function () {
@@ -59,8 +61,12 @@ t.insert(8);
 t.insert(2);
 t.insert(3);
 t.insert(9);
+t.insert(10);
+t.insert(1);
+var treeNode = t.getNode();
+// t.traverse(print)
 
-var print = function (value) {
+function print(value) {
   console.log("value---", value);
 };
 
@@ -75,7 +81,31 @@ var print = function (value) {
 
 const tree = {
   value: 1,
-  left: { value: 2, left: { value: 4, left: null, right: null } },
+  left: {
+    value: 2,
+    left: {
+      value: 4,
+      left: {
+        value: 6,
+        left: null,
+        right: {
+          value: 10,
+          left: null,
+          right: null
+        }
+      },
+      right: {
+        value: 8,
+        left: null,
+        right: null
+      }
+    },
+    right: {
+      value: 21,
+      left: null,
+      right: null
+    }
+  },
   right: {
     value: 5,
     left: null,
@@ -83,30 +113,8 @@ const tree = {
   },
 };
 
-
-// 不使用递归中根序
-function traversalTreeMiddle(tree, fn) {
-  var current = tree;
-  var stack = [];
-  while (true) {
-    while (current) {
-      stack.push(current);
-      current = current.left;
-    }
-    if (stack.length > 0) {
-      current = stack.pop();
-      fn(current.value);
-      current = current.right;
-      continue;
-    } else {
-      break;
-    }
-  }
-}
-
 // 不使用递归中根序
 const traverseRoodMiddle = (bTree, fn) => {
-  debugger;
   const stack = [];
   let current = bTree;
   while (stack.length > 0 || current) {
@@ -136,5 +144,53 @@ const traverseRoodQian = (bTree, fn) => {
     }
   }
 };
+// 不使用递归后根排序
+function postorderTraversal(root, callback) {
+  var p = root
+  var stack = [root]
+  var res = []
+  while (stack.length > 0) {
+    p = stack.pop()
+    res.push(p.value)
+    callback(p.value)
+    if (p.left !== null) {
+      stack.push(p.left)
+    }
+    if (p.right !== null) {
+      stack.push(p.right)
+    }
+  }
+  res.reverse()
+  console.log(res)
+  return res
+}
 
-traverseRoodMiddle(tree, print);
+// postorderTraversal(tree, print);
+
+
+
+function postOrder(node, callback) { //非递归实现
+  var stack = [];
+  stack.push(node);
+  stack.push(node);
+  while (stack.length != 0) {
+    node = stack.pop();
+    console.dir(node)
+    console.log(stack)
+    console.log(stack.length != 0 && node == stack[stack.length - 1])
+    if (stack.length != 0 && node == stack[stack.length - 1]) {
+      if (node.lastElementChild) {
+        stack.push(node.lastElementChild);
+        stack.push(node.lastElementChild);
+      }
+      if (node.firstElementChild) {
+        stack.push(node.firstElementChild);
+        stack.push(node.firstElementChild);
+      }
+    } else {
+      // callback(node);
+    }
+  }
+}
+
+postOrder(document.querySelector('html'), print)

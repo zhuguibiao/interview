@@ -1,100 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <script>
-      /*  几个方法和概念
-        * 1、Object.create(proto,{propertiesObject})：
-            方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__
 
-        * 2、instanceof: 
-              用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上。
-              https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
 
-        * 3、hasOwnProperty
-        *
-      */
-      function _classCallCheck(instance, Constructor) {
-        // this A
-        if (!instance instanceof Constructor) {
-          throw new TypeError("Cannot call a class as a function");
+<body>
+  <script>
+    /*  几个方法和概念
+      * 1、Object.create(proto,{propertiesObject})：
+          方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__
+      * 2、instanceof: 
+            用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上。
+            https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/instanceof
+      * 3、hasOwnProperty
+      * 4、constructor (构造函数) 实例的.constructor 指向构造函数
+      *
+    */
+
+
+    /**
+     * 1、Object.create(proto, propertyObject)
+    */
+    Object.myCreate = function (proto, propertyObject = undefined) {
+      var result
+      function emptyFn() { }
+      emptyFn.prototype = proto
+      result = new emptyFn()
+      // emptyFn.prototype = null
+      result.__proto__ = proto
+
+      if (propertyObject !== undefined) {
+        Object.defineProperties(result, propertyObject)
+      }
+      if (proto === null) {
+        result.__proto__ = null
+      }
+      return result
+    }
+
+
+    // function _classCallCheck(instance, Constructor) {
+    //   // this A
+    //   if (!instance instanceof Constructor) {
+    //     throw new TypeError("Cannot call a class as a function");
+    //   }
+    // }
+    /*
+      class Point {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+        }
+        toString() {
+          return '(' + this.x + ', ' + this.y + ')';
         }
       }
-      /*
-        class Point {
-          constructor(x, y) {
-            this.x = x;
-            this.y = y;
-          }
+    */
 
-          toString() {
-            return '(' + this.x + ', ' + this.y + ')';
-          }
-        }
-      */
-      // 实现class 和extends
-      // 这个是要实现的方法
+    // 实现class 和extends
+    // 这个是要实现的方法
+    // function _inheritsLoose(subClass, superClass) {
+    //   subClass.prototype = Object.create(superClass.prototype);
+    //   subClass.prototype.constructor = subClass;
+    //   subClass.__proto__ = superClass;
+    // }
+    // createClass = function (sons) {
+    //   return sons;
+    // };
 
-      // function _inheritsLoose(subClass, superClass) {
-      //   subClass.prototype = Object.create(superClass.prototype);
-      //   subClass.prototype.constructor = subClass;
-      //   subClass.__proto__ = superClass;
-      // }
+    // 这是个 es6 的一个例子，要实现 extends 的功能。
+    // class Man extends Human {
+    //   cons(args) {
+    //     super(args);
+    //     // xxxxx
+    //   }
+    //   speak() {
+    //     console.log("");
+    //   }
+    // }
 
-      function Point() {
-        this.x = x;
-        this.y = y;
-      }
-      Point.prototype.toString = function () {
-        return "(" + this.x + ", " + this.y + ")";
-      };
 
-      // createClass = function (sons) {
-      //   // TODO
-      //   return sons;
-      // };
+    // function Animal() {
+    //   this.species = "动物";
+    // }
+    // Animal.prototype.say = function () {
+    //   console.log(this.species)
+    // }
 
-      // 这是个 es6 的一个例子，要实现 extends 的功能。
-      // class Man extends Human {
-      //   cons(args) {
-      //     super(args);
-      //     // xxxxx
-      //   }
-      //   speak() {
-      //     console.log("");
-      //   }
-      // }
+    // function Cat(name, color) {
+    //   Animal.apply(this, arguments);
+    //   this.name = name;
+    //   this.color = color;
+    // }
 
-      function fn() {
-        console.log(1);
-        setTimeout(() => {
-          console.log(2);
-        }, 1000);
-      }
-      fn();
-      setTimeout(() => {
-        console.log(3);
-      });
-      new Promise((res) => {
-        console.log(4);
-        setTimeout(() => {
-          console.log(5);
-        }, 100);
-        res();
-      }).then(() => {
-        setTimeout(() => {
-          console.log(6);
-        }, 0);
-        console.log(7);
-      });
-      console.log(8);
-      
-      // 1 4 8 3 5 7 6 2
-      // 1 4 8 7 3 6 5 2
-    </script>
-  </body>
+    // function extend(Child, Parent) {
+    //   var F = function () { };
+    //   F.prototype = Parent.prototype;
+    //   Child.prototype = new F();
+    //   Child.prototype.constructor = Child;
+    //   Child.uber = Parent.prototype;
+    //   // console.dir(Child.__proto__ === Function.prototype)
+    //   console.dir(Child.prototype.__proto__)
+    //   console.dir(Parent)
+
+    // }
+    // extend(Cat, Animal);
+    // var cat1 = new Cat("大毛", "黄色");
+
+
+
+    // ES5 实现ES6 extends的例子
+    function Parent(name) {
+      this.name = name;
+    }
+    Parent.prototype.sayName = function () {
+      console.log('my name is ' + this.name);
+      return this.name;
+    }
+
+    function Child(name, age) {
+      Parent.call(this, name);
+      this.age = age;
+    }
+
+    // function object() {
+    //   function F() { }
+    //   F.prototype = proto;
+    //   return new F();
+    // }
+    // function _inherits(Child, Parent) {
+    //   Child.prototype = Object.create(Parent.prototype);
+    //   Child.prototype.sayName = () => { console.log(1) }
+    //   Child.prototype.constructor = Child;
+    //   Child.__proto__ = Parent;
+    // }
+    // _inherits(Child, Parent);
+
+    // Child.prototype.sayAge = function () {
+    //   console.log('my age is ' + this.age);
+    //   return this.age;
+    // }
+    // var parent = new Parent('Parent');
+    // var child = new Child('Child', 18);
+    // console.log('parent: ', parent); // parent:  Parent {name: "Parent"}
+    // parent.sayName(); // my name is Parent
+    // console.log('child: ', child); // child:  Child {name: "Child", age: 18}
+    // child.sayName(); // my name is Childs
+    // child.sayAge(); // my age is 18
+
+  </script>
+</body>
+
 </html>
